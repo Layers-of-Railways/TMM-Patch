@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "tmm_patch",
+  "version": "1.0.1",
+  "name": "Train Murder Mystery Patch",
+  "description": "Patches StartCommand to remove supporter check",
+  "authors": [
+    "luna"
+  ],
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "dev.lopyluna.tmmpatch.TMMPatchMod"
+    ],
+    "mixinsquared": [
+      "dev.lopyluna.tmmpatch.TMMPatchMixinCanceller"
+    ]
+  },
+  "mixins": [
+    "tmm_patch.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.1",
+    "minecraft": "~1.21.1",
+    "java": ">=21",
+    "fabric-api": "*",
+    "trainmurdermystery": "*"
+  },
+  "custom": {
+    "modmenu": {
+      "parent": "trainmurdermystery"
+    }
+  }
+}

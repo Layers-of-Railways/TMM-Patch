@@ -1,0 +1,22 @@
+{
+  "required": true,
+  "package": "dev.lopyluna.tmmpatch.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "priority": 2000,
+  "mixins": [
+    "GameFunctionsMixin",
+    "HornBlockMixin",
+    "TMMMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "client": [
+    "client.ChatHudAccessor",
+    "client.ChatHudMixinOverride",
+    "client.GameOptionsMixinOverride",
+    "client.KeyBindingMixinOverride",
+    "client.LobbyPlayersRendererMixin"
+  ]
+}
+
