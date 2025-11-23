@@ -13,6 +13,12 @@
     "main": [
       "dev.lopyluna.tmmpatch.TMMPatchMod"
     ],
+    "client": [
+      "dev.lopyluna.tmmpatch.client.TMMPatchClient::INSTANCE"
+    ],
+    "dynamiclights": [
+      "dev.lopyluna.tmmpatch.client.TMMPatchClient::INSTANCE"
+    ],
     "mixinsquared": [
       "dev.lopyluna.tmmpatch.TMMPatchMixinCanceller"
     ]
@@ -27,6 +33,7 @@
     "fabric-api": "*",
     "trainmurdermystery": "*"
   },
+  "accessWidener" : "tmm_patch.accesswidener",
   "custom": {
     "modmenu": {
       "parent": "trainmurdermystery"

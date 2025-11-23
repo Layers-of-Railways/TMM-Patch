@@ -3,9 +3,12 @@ package dev.lopyluna.tmmpatch;
 import dev.lopyluna.tmmpatch.commands.ChangeOptionsCommand;
 import dev.lopyluna.tmmpatch.commands.ModifierArgumentType;
 import dev.lopyluna.tmmpatch.commands.StartGameCommand;
+import dev.lopyluna.tmmpatch.component.ModComponents;
+import dev.lopyluna.tmmpatch.item.ModItems;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.command.argument.serialize.ConstantArgumentSerializer;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
@@ -24,6 +27,12 @@ public class TMMPatchMod implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        // Initialize custom data components
+        ModComponents.initialize();
+
+        // Initialize custom items
+        ModItems.initialize();
+
         gameWorldComponentAlternate = new GameWorldComponentAlternate();
 
         ArgumentTypeRegistry.registerArgumentType(id("modifier"), ModifierArgumentType.class, ConstantArgumentSerializer.of(ModifierArgumentType::modifier));
@@ -32,6 +41,8 @@ public class TMMPatchMod implements ModInitializer {
             StartGameCommand.register(dispatcher);
             ChangeOptionsCommand.register(dispatcher);
         });
+
+        ServerTickEvents.START_WORLD_TICK.register(world -> gameWorldComponentAlternate.tick(world));
     }
 }
 

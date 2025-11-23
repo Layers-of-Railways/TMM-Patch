@@ -1,4 +1,4 @@
-package dev.lopyluna.tmmpatch;
+package dev.lopyluna.tmmpatch.client;
 
 import dev.doctor4t.trainmurdermystery.client.TMMClient;
 import dev.lopyluna.tmmpatch.mixin.client.ChatHudAccessor;

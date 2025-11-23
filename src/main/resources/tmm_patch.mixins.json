@@ -6,7 +6,8 @@
   "mixins": [
     "GameFunctionsMixin",
     "HornBlockMixin",
-    "TMMMixin"
+    "TMMMixin",
+    "WorldBlackoutComponentAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

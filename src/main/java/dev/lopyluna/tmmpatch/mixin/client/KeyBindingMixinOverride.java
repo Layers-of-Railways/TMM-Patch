@@ -1,12 +1,11 @@
 package dev.lopyluna.tmmpatch.mixin.client;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import com.llamalad7.mixinextras.sugar.Local;
 import dev.doctor4t.trainmurdermystery.client.TMMClient;
-import dev.lopyluna.tmmpatch.ClientUtils;
+import dev.lopyluna.tmmpatch.client.ClientUtils;
+import dev.lopyluna.tmmpatch.item.FlashlightItem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.util.InputUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -21,7 +20,8 @@ public abstract class KeyBindingMixinOverride {
     private boolean shouldSuppressKey() {
         if (TMMClient.isPlayerSpectatingOrCreative()) return false;
         if (ClientUtils.isGameInProgress()) {
-            return this.equals(MinecraftClient.getInstance().options.swapHandsKey) ||
+            var maySwapFlashlight = FlashlightItem.maySwapFlashlightWithHands(MinecraftClient.getInstance().player);
+            return this.equals(MinecraftClient.getInstance().options.swapHandsKey) && !maySwapFlashlight ||
                     this.equals(MinecraftClient.getInstance().options.jumpKey) ||
                     this.equals(MinecraftClient.getInstance().options.dropKey) ||
                     this.equals(MinecraftClient.getInstance().options.advancementsKey) ||

@@ -2,7 +2,7 @@ package dev.lopyluna.tmmpatch.mixin.client;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import dev.doctor4t.trainmurdermystery.client.TMMClient;
-import dev.lopyluna.tmmpatch.ClientUtils;
+import dev.lopyluna.tmmpatch.client.ClientUtils;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.option.Perspective;
 import org.spongepowered.asm.mixin.Mixin;
