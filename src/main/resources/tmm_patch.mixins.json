@@ -6,6 +6,7 @@
   "mixins": [
     "GameFunctionsMixin",
     "HornBlockMixin",
+    "PlayerBodyEntityMixin",
     "TMMMixin",
     "WorldBlackoutComponentAccessor"
   ],

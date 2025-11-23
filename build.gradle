@@ -38,7 +38,7 @@ dependencies {
     modImplementation "dev.lambdaurora.lambdynamiclights:lambdynamiclights-api:4.8.6+1.21.1"
     modImplementation "dev.lambdaurora.lambdynamiclights:lambdynamiclights-runtime:4.8.6+1.21.1"
 
-    modImplementation "dev.doctor4t:trainmurdermystery:1.1-1.21.1"
+    modImplementation "dev.doctor4t:trainmurdermystery:1.1.4-1.21.1"
 
     // MixinSquared
     include(implementation(annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-fabric:0.3.7-beta.1")))
