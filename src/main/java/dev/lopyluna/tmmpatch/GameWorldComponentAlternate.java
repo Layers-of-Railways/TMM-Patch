@@ -29,6 +29,18 @@ public class GameWorldComponentAlternate {
     public List<ServerPlayerEntity> players = new ArrayList<>(); //Players Old - Pre | Players New - Post
     public int playerCount = 0;
 
+    private static class ScheduledTask {
+        int ticksRemaining;
+        Runnable task;
+
+        ScheduledTask(int ticks, Runnable task) {
+            this.ticksRemaining = ticks;
+            this.task = task;
+        }
+    }
+
+    private final List<ScheduledTask> scheduledTasks = new ArrayList<>();
+
     public enum GameModifier implements StringIdentifiable {
         NONE,
         MASQUERADE,
@@ -42,7 +54,25 @@ public class GameWorldComponentAlternate {
     }
 
     public void tick(ServerWorld world) {
-        tickTriggerModifier(world);
+        tickScheduledTasks();
+    }
+
+    private void tickScheduledTasks() {
+        if (scheduledTasks.isEmpty()) return;
+
+        List<ScheduledTask> toRemove = new ArrayList<>();
+        for (ScheduledTask task : scheduledTasks) {
+            task.ticksRemaining--;
+            if (task.ticksRemaining <= 0) {
+                task.task.run();
+                toRemove.add(task);
+            }
+        }
+        scheduledTasks.removeAll(toRemove);
+    }
+
+    public void scheduleTask(int ticks, Runnable task) {
+        scheduledTasks.add(new ScheduledTask(ticks, task));
     }
 
     public void initializeGamePre(ServerWorld world) {
@@ -53,23 +83,20 @@ public class GameWorldComponentAlternate {
         triggerModifier(world);
     }
 
-    int modifierTargetTime = 0;
-    boolean modifierTriggered = false;
 
     public void triggerModifier(ServerWorld world) {
         if (modifier == GameModifier.NONE) return;
         //var game = GameWorldComponent.KEY.get(world);
         var trainWorld = TrainWorldComponent.KEY.get(world);
         var time = GameTimeComponent.KEY.get(world).getTime();
-        modifierTargetTime = Math.round(time * 0.95f);
-        modifierTriggered = false;
+
+        scheduleTask(30 * 20, () -> tickTriggerModifier(world));
 
         if (modifier == GameModifier.MASQUERADE) { //TODO
         }
 
         if (modifier == GameModifier.BLACKOUT) {
             trainWorld.setTimeOfDay(TrainWorldComponent.TimeOfDay.NIGHT);
-
             for (ServerPlayerEntity player : players) player.giveItemStack(ModItems.FLASHLIGHT.getDefaultStack());
         }
 
@@ -78,22 +105,20 @@ public class GameWorldComponentAlternate {
     }
 
     public void tickTriggerModifier(ServerWorld world) {
-        if (modifierTriggered || modifierTargetTime == 0) return;
         var time = GameTimeComponent.KEY.get(world).getTime();
-        if (time == 0) return;
-        if (time > modifierTargetTime) return;
-        modifierTriggered = true;
 
         if (modifier == GameModifier.BLACKOUT) {
             var blackout = WorldBlackoutComponent.KEY.get(world);
             var blackoutAcc = (WorldBlackoutComponentAccessor) blackout;
+            blackout.reset();
+            blackoutAcc.ticks(0);
             var area = GameConstants.PLAY_AREA;
             if (blackoutAcc.ticks() > 0) return;
             for (var x = (int) area.minX; x <= (int) area.maxX; x++) for (var y = (int) area.minY; y <= (int) area.maxY; y++) for (var z = (int) area.minZ; z <= (int) area.maxZ; z++) {
                 var pos = new BlockPos(x, y, z);
                 var state = world.getBlockState(pos);
                 if (!state.contains(Properties.LIT) || !state.contains(TMMProperties.ACTIVE)) continue;
-                var duration = time * playerCount;
+                var duration = time + (20 * 60) * playerCount;
                 if (duration > blackoutAcc.ticks()) blackoutAcc.ticks(duration);
                 var detail = new WorldBlackoutComponent.BlackoutDetails(pos, duration, state.get(Properties.LIT));
                 detail.init(world);
