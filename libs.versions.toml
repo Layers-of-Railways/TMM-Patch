@@ -1,0 +1,38 @@
+[versions]
+loom = "1.13-SNAPSHOT"
+
+mc = "1.21.1"
+fl = "0.18.1"
+yarn = "1.21.1+build.3"
+fapi = "0.116.7+1.21.1"
+mixinsquared = "0.3.7-beta.1"
+
+trainmurdermystery = "1.1-1.21.1"
+datasync = "0.9.0"
+cca = "6.1.1"
+
+lambdynlights = "4.8.6+1.21.1"
+modmenu = "11.0.3"
+
+[plugins]
+loom = { id = "fabric-loom", version.ref = "loom" }
+
+[libraries]
+mc = { module = "mojang:minecraft", version.ref = "mc" }
+fl = { module = "net.fabricmc:fabric-loader", version.ref = "fl" }
+yarn = { module = "net.fabricmc:yarn", version.ref = "yarn" }
+fapi = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fapi" }
+mixinsquared = { module = "com.github.bawnorton.mixinsquared:mixinsquared-fabric", version.ref = "mixinsquared" }
+
+trainmurdermystery = { module = "dev.doctor4t:trainmurdermystery", version.ref = "trainmurdermystery" }
+datasync = { module = "dev.upcraft.datasync:datasync-minecraft-1.21.1-fabric", version.ref = "datasync" }
+
+cca-base       = { module = "org.ladysnake.cardinal-components-api:cardinal-components-base",       version.ref = "cca" }
+cca-world      = { module = "org.ladysnake.cardinal-components-api:cardinal-components-world",      version.ref = "cca" }
+cca-entity     = { module = "org.ladysnake.cardinal-components-api:cardinal-components-entity",     version.ref = "cca" }
+cca-scoreboard = { module = "org.ladysnake.cardinal-components-api:cardinal-components-scoreboard", version.ref = "cca" }
+
+lambdynlights-api = { module = "dev.lambdaurora.lambdynamiclights:lambdynamiclights-api",     version.ref = "lambdynlights" }
+lambdynlights-runtime = { module = "dev.lambdaurora.lambdynamiclights:lambdynamiclights-runtime", version.ref = "lambdynlights" }
+
+modmenu = { module = "com.terraformersmc:modmenu", version.ref = "modmenu" }

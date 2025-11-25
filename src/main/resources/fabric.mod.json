@@ -1,12 +1,17 @@
 {
   "schemaVersion": 1,
   "id": "tmm_patch",
-  "version": "1.0.1",
+  "version": "${version}",
   "name": "Train Murder Mystery Patch",
-  "description": "Patches StartCommand to remove supporter check",
+  "description": "Adds new modes, modifiers, and commands to the Train Murder Mystery mod",
   "authors": [
-    "luna"
+    "luna",
+    "Slimeist"
   ],
+  "contact": {
+    "sources": "https://github.com/Layers-of-Railways/TMM-Patch",
+    "issues": "https://github.com/Layers-of-Railways/TMM-Patch/issues"
+  },
   "license": "MIT",
   "environment": "*",
   "entrypoints": {
@@ -23,17 +28,18 @@
       "dev.lopyluna.tmmpatch.TMMPatchMixinCanceller"
     ]
   },
+  "accessWidener" : "tmm_patch.accesswidener",
   "mixins": [
     "tmm_patch.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.16.1",
-    "minecraft": "~1.21.1",
+    "minecraft": "~${minecraft_version}",
+    "fabricloader": ">=${fabric_loader_version}",
+    "fabric-api": ">=${fabric_api_version}",
     "java": ">=21",
-    "fabric-api": "*",
-    "trainmurdermystery": "*"
+    "trainmurdermystery": "*",
+    "lambdynlights": ">=4.0.0"
   },
-  "accessWidener" : "tmm_patch.accesswidener",
   "custom": {
     "modmenu": {
       "parent": "trainmurdermystery"
