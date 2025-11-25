@@ -1,43 +1,78 @@
 package dev.lopyluna.tmmpatch.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
+import dev.doctor4t.trainmurdermystery.cca.GameWorldComponent.GameMode;
 import dev.doctor4t.trainmurdermystery.command.argument.TMMGameModeArgumentType;
+import dev.lopyluna.tmmpatch.GameWorldComponentAlternate;
+import dev.lopyluna.tmmpatch.GameWorldComponentAlternate.GameModifier;
 import dev.lopyluna.tmmpatch.TMMPatchMod;
-import net.minecraft.server.command.CommandManager;
+import dev.lopyluna.tmmpatch.commands.arguments.ModifierArgumentType;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 
+import static net.minecraft.server.command.CommandManager.argument;
+import static net.minecraft.server.command.CommandManager.literal;
+
 public class ChangeOptionsCommand {
-
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
-        dispatcher.register(CommandManager.literal("tmm:select_mode").requires((source) -> source.hasPermissionLevel(2))
-                .then(CommandManager.argument("gameMode", TMMGameModeArgumentType.gamemode())
-                        .executes((context) -> {
-                            var targetMode = TMMGameModeArgumentType.getGamemode(context, "gameMode");
-                            if (targetMode == TMMPatchMod.gameWorldComponentAlternate.selectedGameMode || targetMode == null) {
-                                if (targetMode != null) context.getSource().sendError(Text.of("Mode is already " + targetMode));
-                                else context.getSource().sendError(Text.of("Mode is null"));
-                                return -1;
-                            }
-                            var old = TMMPatchMod.gameWorldComponentAlternate.selectedGameMode;
-                            TMMPatchMod.gameWorldComponentAlternate.selectedGameMode = targetMode;
-                            context.getSource().sendFeedback(() -> Text.of("Changed Mode from " + old + " to " + targetMode), true);
-                            return 1;
-                        })));
-        dispatcher.register(CommandManager.literal("tmm:select_modifier").requires((source) -> source.hasPermissionLevel(2))
-                .then(CommandManager.argument("gameModifier", ModifierArgumentType.modifier())
-                        .executes((context) -> {
-                            var targetModifier = ModifierArgumentType.getModifier(context, "gameModifier");
-                            if (targetModifier == TMMPatchMod.gameWorldComponentAlternate.selectedGameModifier || targetModifier == null) {
-                                if (targetModifier != null) context.getSource().sendError(Text.of("Modifier is already " + targetModifier));
-                                else context.getSource().sendError(Text.of("Modifier is null"));
-                                return -1;
-                            }
-                            var old = TMMPatchMod.gameWorldComponentAlternate.selectedGameModifier;
-                            TMMPatchMod.gameWorldComponentAlternate.selectedGameModifier = targetModifier;
-                            context.getSource().sendFeedback(() -> Text.of("Changed Modifier from " + old + " to " + targetModifier), true);
-                            return 1;
-                        })));
+        dispatcher.register(
+            literal("tmm:select_mode")
+                .requires(src -> src.hasPermissionLevel(2))
+                .then(argument("gameMode", TMMGameModeArgumentType.gamemode())
+                    .executes(ctx -> $select_mode(
+                        ctx.getSource(),
+                        TMMGameModeArgumentType.getGamemode(ctx, "gameMode")
+                    ))
+                )
+        );
 
+        dispatcher.register(
+            literal("tmm:select_modifier")
+                .requires(src -> src.hasPermissionLevel(2))
+                .then(argument("gameModifier", ModifierArgumentType.modifier())
+                    .executes((context) -> $select_modifier(
+                        context.getSource(),
+                        ModifierArgumentType.getModifier(context, "gameModifier")
+                    ))
+                )
+        );
+    }
+
+    private static int $select_mode(ServerCommandSource source, GameMode targetMode) {
+        GameWorldComponentAlternate alternateGameWorld = TMMPatchMod.gameWorldComponentAlternate;
+
+        if (targetMode == alternateGameWorld.selectedGameMode) {
+            source.sendError(Text.translatable("commands.tmm_patch.select_mode.error.unchanged", targetMode));
+            return -1;
+        }
+
+        if (targetMode == null) {
+            source.sendError(Text.translatable("commands.tmm_patch.select_mode.error.null"));
+            return -1;
+        }
+
+        GameMode old = alternateGameWorld.selectedGameMode;
+        alternateGameWorld.selectedGameMode = targetMode;
+        source.sendFeedback(() -> Text.translatable("commands.tmm_patch.select_mode.success", old, targetMode), true);
+        return 1;
+    }
+
+    private static int $select_modifier(ServerCommandSource source, GameModifier targetModifier) {
+        GameWorldComponentAlternate alternateGameWorld = TMMPatchMod.gameWorldComponentAlternate;
+
+        if (targetModifier == alternateGameWorld.selectedGameModifier) {
+            source.sendError(Text.translatable("commands.tmm_patch.select_modifier.error.unchanged", targetModifier));
+            return -1;
+        }
+
+        if (targetModifier == null) {
+            source.sendError(Text.translatable("commands.tmm_patch.select_modifier.error.null"));
+            return -1;
+        }
+
+        GameModifier old = alternateGameWorld.selectedGameModifier;
+        alternateGameWorld.selectedGameModifier = targetModifier;
+        source.sendFeedback(() -> Text.translatable("commands.tmm_patch.select_modifier.success", old, targetModifier), true);
+        return 1;
     }
 }

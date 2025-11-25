@@ -1,3 +1,13 @@
 {
-  "item.tmm_patch.flashlight": "Flashlight"
+  "item.tmm_patch.flashlight": "Flashlight",
+  "item.tmm_patch.flashlight.battery.empty": "Battery Empty",
+  "item.tmm_patch.flashlight.battery.percentage": "Battery: %s%%",
+
+  "commands.tmm_patch.select_mode.error.unchanged": "Mode is already %s",
+  "commands.tmm_patch.select_mode.error.null": "Mode cannot be null",
+  "commands.tmm_patch.select_mode.success": "Mode changed from %s to %s",
+
+  "commands.tmm_patch.select_modifier.error.unchanged": "Modifier is already %s",
+  "commands.tmm_patch.select_modifier.error.null": "Modifier cannot be null",
+  "commands.tmm_patch.select_modifier.success": "Modifier changed from %s to %s"
 }

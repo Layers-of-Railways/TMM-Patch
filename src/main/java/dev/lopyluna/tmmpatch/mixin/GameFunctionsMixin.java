@@ -19,14 +19,15 @@ import java.util.List;
 
 @Mixin(targets = "dev.doctor4t.trainmurdermystery.game.GameFunctions", remap = false)
 public class GameFunctionsMixin {
-    
-    @Inject(method = "initializeGame", at = @At(value = "INVOKE", target = "Ldev/doctor4t/trainmurdermystery/cca/GameWorldComponent;sync()V"), remap = false)
-    private static void initializeGame(ServerWorld world, CallbackInfo ci) {
-        TMMPatchMod.gameWorldComponentAlternate.initializeGamePost(world);
-    }
+
     @Inject(method = "initializeGame", at = @At("HEAD"), remap = false)
     private static void initializeGamePre(ServerWorld world, CallbackInfo ci) {
         TMMPatchMod.gameWorldComponentAlternate.initializeGamePre(world);
+    }
+
+    @Inject(method = "initializeGame", at = @At(value = "INVOKE", target = "Ldev/doctor4t/trainmurdermystery/cca/GameWorldComponent;sync()V"), remap = false)
+    private static void initializeGame(ServerWorld world, CallbackInfo ci) {
+        TMMPatchMod.gameWorldComponentAlternate.initializeGamePost(world);
     }
 
     @ModifyConstant(method = "startGame", constant = @Constant(intValue = 6), remap = false)

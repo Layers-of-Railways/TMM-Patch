@@ -1,4 +1,4 @@
-package dev.lopyluna.tmmpatch.commands;
+package dev.lopyluna.tmmpatch.commands.arguments;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.serialization.Codec;
@@ -11,10 +11,14 @@ import java.util.Arrays;
 import java.util.Locale;
 
 public class ModifierArgumentType extends EnumArgumentType<GameWorldComponentAlternate.GameModifier> {
-    private static final Codec<GameWorldComponentAlternate.GameModifier> CODEC = StringIdentifiable.createCodec(ModifierArgumentType::getValues, name -> name.toLowerCase(Locale.ROOT));
+    private static final Codec<GameWorldComponentAlternate.GameModifier> CODEC = StringIdentifiable.createCodec(
+        ModifierArgumentType::getValues,
+        name -> name.toLowerCase(Locale.ROOT)
+    );
 
     private static GameWorldComponentAlternate.GameModifier[] getValues() {
-        return Arrays.stream(GameWorldComponentAlternate.GameModifier.values()).toArray(GameWorldComponentAlternate.GameModifier[]::new);
+        return Arrays.stream(GameWorldComponentAlternate.GameModifier.values())
+            .toArray(GameWorldComponentAlternate.GameModifier[]::new);
     }
 
     private ModifierArgumentType() {

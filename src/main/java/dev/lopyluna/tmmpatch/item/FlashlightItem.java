@@ -25,31 +25,37 @@ public class FlashlightItem extends Item {
     @Override
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
         super.inventoryTick(stack, world, entity, slot, selected);
-        if (entity instanceof PlayerEntity player) {
-            if (stack.getDamage() >= stack.getMaxDamage()) return;
-            if (player.getInventory().selectedSlot == slot) {
-                if (isHoldingPoweredFlashlight(player, Hand.MAIN_HAND)) tickDrain(stack, player, world);
-            } else {
-                if (isHoldingPoweredFlashlight(player, Hand.OFF_HAND)) tickDrain(stack, player, world);
-            }
-        }
+
+        if (!(entity instanceof PlayerEntity player)) return;
+        if (stack.getDamage() >= stack.getMaxDamage()) return;
+
+        Hand hand = player.getInventory().selectedSlot == slot ? Hand.MAIN_HAND : Hand.OFF_HAND;
+        if (isHoldingPoweredFlashlight(player, hand))
+            tickDrain(stack, player, world);
     }
 
     public void tickDrain(ItemStack stack, PlayerEntity player, World world) {
         if (player.isCreative() || player.isSpectator()) return;
         if (stack.getDamage() >= stack.getMaxDamage()) return;
+
         if (stack.getDamage() == stack.getMaxDamage() - 1) {
             stack.set(ModComponents.ON, false);
-            if (world.isClient()) player.playSound(SoundEvents.BLOCK_CANDLE_EXTINGUISH, 1F, 1F);
+            if (world.isClient())
+                player.playSound(SoundEvents.BLOCK_CANDLE_EXTINGUISH, 1F, 1F);
         }
+
         stack.setDamage(stack.getDamage() + 1);
     }
 
     @Override
     public int getItemBarColor(ItemStack stack) {
-        int i = stack.getMaxDamage();
-        float f = Math.max(0.0F, ((float)i - (float)stack.getDamage()) / (float)i);
-        return MathHelper.hsvToRgb(MathHelper.abs((f / 8.0F) + 0.05f), 0.6F, 1.0F);
+        int maxDamage = stack.getMaxDamage();
+        float remaining = Math.max(0.0F, ((float)maxDamage - (float)stack.getDamage()) / (float)maxDamage);
+        return MathHelper.hsvToRgb(
+            MathHelper.abs((remaining / 8.0F) + 0.05f),
+            0.6F,
+            1.0F
+        );
     }
 
     @Override
@@ -59,9 +65,14 @@ public class FlashlightItem extends Item {
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-        if (hand == Hand.OFF_HAND) return TypedActionResult.pass(user.getOffHandStack());
         ItemStack stack = user.getStackInHand(hand);
-        if (stack.getDamage() >= stack.getMaxDamage()) return TypedActionResult.fail(stack);
+
+        if (hand == Hand.OFF_HAND)
+            return TypedActionResult.pass(stack);
+
+        if (stack.getDamage() >= stack.getMaxDamage())
+            return TypedActionResult.fail(stack);
+
         boolean currentState = stack.getOrDefault(ModComponents.ON, false);
 
         if (world.isClient()) {
@@ -74,43 +85,36 @@ public class FlashlightItem extends Item {
     }
 
     public static boolean isHoldingPoweredFlashlight(LivingEntity living) {
-        if (living == null) return false;
-        var main = living.getMainHandStack();
-        var off = living.getOffHandStack();
-        if (main.isEmpty() && off.isEmpty()) return false;
-
-        if (main.isOf(ModItems.FLASHLIGHT) && main.getOrDefault(ModComponents.ON, false)) return true;
-        return off.isOf(ModItems.FLASHLIGHT) && off.getOrDefault(ModComponents.ON, false);
+        return isHoldingPoweredFlashlight(living, Hand.MAIN_HAND) || isHoldingPoweredFlashlight(living, Hand.OFF_HAND);
     }
 
     public static boolean isHoldingPoweredFlashlight(LivingEntity living, Hand hand) {
-        if (living == null) return false;
-        if (hand == Hand.MAIN_HAND) {
-            var main = living.getMainHandStack();
-            if (main.isEmpty()) return false;
-            return main.isOf(ModItems.FLASHLIGHT) && main.getOrDefault(ModComponents.ON, false);
-        } else {
-            var off = living.getOffHandStack();
-            if (off.isEmpty()) return false;
-            return off.isOf(ModItems.FLASHLIGHT) && off.getOrDefault(ModComponents.ON, false);
-        }
+        if (living == null)
+            return false;
+
+        ItemStack stack = living.getStackInHand(hand);
+        return stack.isOf(ModItems.FLASHLIGHT) && stack.getOrDefault(ModComponents.ON, false);
     }
 
     public static boolean maySwapFlashlightWithHands(LivingEntity living) {
-        if (living == null) return false;
+        if (living == null)
+            return false;
+
         var main = living.getMainHandStack();
         var off = living.getOffHandStack();
-        if (main.isEmpty() && off.isOf(ModItems.FLASHLIGHT)) return true;
-        return off.isEmpty() && main.isOf(ModItems.FLASHLIGHT);
+
+        return (main.isEmpty() && off.isOf(ModItems.FLASHLIGHT))
+            || (off.isEmpty() && main.isOf(ModItems.FLASHLIGHT));
     }
 
     @Override
     public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
         if (stack.getDamage() >= stack.getMaxDamage()) {
-            tooltip.add(Text.of("Battery Empty").copy().formatted(Formatting.RED));
-            return;
+            tooltip.add(Text.translatable("item.tmm_patch.flashlight.battery.empty").formatted(Formatting.RED));
+        } else {
+            int percentage = (int) ((1 - (float) stack.getDamage() / stack.getMaxDamage()) * 99 + 1);
+            tooltip.add(Text.translatable("item.tmm_patch.flashlight.battery.percentage", percentage).withColor(getItemBarColor(stack)));
         }
-        tooltip.add(Text.of("Battery: " + (int)((1 - (float)stack.getDamage() / stack.getMaxDamage()) * 99 + 1) + "%").copy().withColor(getItemBarColor(stack)));
     }
 }
 

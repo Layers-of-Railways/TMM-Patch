@@ -22,7 +22,7 @@ public class LobbyPlayersRendererMixin {
     }
 
     @WrapOperation(method = "renderHud", at = @At(value = "INVOKE", target = "Lnet/minecraft/text/Text;translatable(Ljava/lang/String;[Ljava/lang/Object;)Lnet/minecraft/text/MutableText;", ordinal = 0))
-    private static MutableText tmmpatch$modifyThankYouMessageColor(String key, Object[] args, Operation<MutableText> original, @Local(ordinal = 1) int playerCount) {
+    private static MutableText tmmpatch$modifyJoinProgressMessage(String key, Object[] args, Operation<MutableText> original, @Local(name = "readyPlayerCount") int playerCount) {
         var c = (int)Math.floor((float)playerCount * 0.2F);
         int killerCount = c == 0 ? 1 : c;
         return original.call(key, args).append(" -").append(Text.literal(" " + killerCount).formatted(Formatting.RED));

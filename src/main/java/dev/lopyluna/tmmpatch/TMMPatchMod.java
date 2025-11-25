@@ -1,7 +1,7 @@
 package dev.lopyluna.tmmpatch;
 
 import dev.lopyluna.tmmpatch.commands.ChangeOptionsCommand;
-import dev.lopyluna.tmmpatch.commands.ModifierArgumentType;
+import dev.lopyluna.tmmpatch.commands.arguments.ModifierArgumentType;
 import dev.lopyluna.tmmpatch.commands.StartGameCommand;
 import dev.lopyluna.tmmpatch.component.ModComponents;
 import dev.lopyluna.tmmpatch.item.ModItems;
