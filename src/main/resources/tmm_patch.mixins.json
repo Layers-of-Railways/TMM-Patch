@@ -18,7 +18,8 @@
     "client.ChatHudMixinOverride",
     "client.GameOptionsMixinOverride",
     "client.KeyBindingMixinOverride",
-    "client.LobbyPlayersRendererMixin"
+    "client.LobbyPlayersRendererMixin",
+    "client.TMMConfigMixin"
   ]
 }
 
