@@ -2,7 +2,7 @@
 loom = "1.13-SNAPSHOT"
 
 mc = "1.21.1"
-fl = "0.18.1"
+fl = "0.17.3"
 yarn = "1.21.1+build.3"
 fapi = "0.116.7+1.21.1"
 mixinsquared = "0.3.7-beta.1"
