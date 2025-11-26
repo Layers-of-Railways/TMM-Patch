@@ -10,7 +10,7 @@ plugins {
 println("TMM Patch v${"mod_version"()}")
 
 val isRelease = System.getenv("RELEASE_BUILD")?.toBoolean() ?: false
-val buildNumber = System.getenv("GITHUB_RUN_NUBMER")?.toInt()
+val buildNumber = System.getenv("GITHUB_RUN_NUMBER")?.toInt()
 val gitHash = "\"${calculateGitHash() + (if (hasUnstaged()) "-modified" else "")}\""
 val accessWidenerFile = file("src/main/resources/tmm_patch.accesswidener")
 
