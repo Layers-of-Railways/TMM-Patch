@@ -4,9 +4,12 @@
   "compatibilityLevel": "JAVA_21",
   "priority": 2000,
   "mixins": [
+    "CheckWeightsCommandMixin",
+    "EnableWeightsCommandMixin",
     "GameFunctionsMixin",
     "HornBlockMixin",
     "PlayerBodyEntityMixin",
+    "ResetWeightsCommandMixin",
     "TMMMixin",
     "WorldBlackoutComponentAccessor"
   ],
