@@ -1,14 +1,15 @@
 package dev.lopyluna.tmmpatch;
 
 import dev.lopyluna.tmmpatch.commands.ChangeOptionsCommand;
-import dev.lopyluna.tmmpatch.commands.arguments.ModifierArgumentType;
 import dev.lopyluna.tmmpatch.commands.StartGameCommand;
+import dev.lopyluna.tmmpatch.commands.arguments.ModifierArgumentType;
 import dev.lopyluna.tmmpatch.component.ModComponents;
 import dev.lopyluna.tmmpatch.item.ModItems;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.minecraft.SharedConstants;
 import net.minecraft.command.argument.serialize.ConstantArgumentSerializer;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
@@ -27,6 +28,9 @@ public class TMMPatchMod implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        if (Boolean.getBoolean("tmm_patch.enable_dev_mode"))
+            SharedConstants.isDevelopment = true;
+
         // Initialize custom data components
         ModComponents.initialize();
 
