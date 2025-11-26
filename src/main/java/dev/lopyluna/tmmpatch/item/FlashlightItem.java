@@ -54,7 +54,7 @@ public class FlashlightItem extends Item {
         return MathHelper.hsvToRgb(
             MathHelper.abs((remaining / 8.0F) + 0.05f),
             0.6F,
-            1.0F
+            stack.getOrDefault(ModComponents.ON, false) ? 1.0F : 0.75F
         );
     }
 
@@ -109,6 +109,9 @@ public class FlashlightItem extends Item {
 
     @Override
     public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
+        if (stack.getOrDefault(ModComponents.ON, false))
+            tooltip.add(Text.translatable("item.tmm_patch.flashlight.lit").formatted(Formatting.YELLOW));
+
         if (stack.getDamage() >= stack.getMaxDamage()) {
             tooltip.add(Text.translatable("item.tmm_patch.flashlight.battery.empty").formatted(Formatting.RED));
         } else {

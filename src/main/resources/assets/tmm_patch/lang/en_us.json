@@ -1,5 +1,6 @@
 {
   "item.tmm_patch.flashlight": "Flashlight",
+  "item.tmm_patch.flashlight.lit": "Lit",
   "item.tmm_patch.flashlight.battery.empty": "Battery Empty",
   "item.tmm_patch.flashlight.battery.percentage": "Battery: %s%%",
 
